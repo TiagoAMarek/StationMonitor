@@ -53,7 +53,7 @@
 
         public function maxRain(){
             if(isset($this->rain)){
-                echo "<span class='badge'>".($this->totalRain-($this->arr[0][7]))."</span>";
+                echo "<span class='badge'>".$this->totalRain."</span>";
             }
         }
 
@@ -112,7 +112,7 @@
             if(!isset($lastPosition)){
                 $lastPosition = 0;
             }
-            if(count($this->arr) != 0){
+            if(!empty($this->arr)){
                 if($this->rainSum >= $this->arr[$lastPosition][7]){
                     $lastPosition = (count($this->arr) - 1);
                     if($this->rainSum > $this->rain){
@@ -122,11 +122,11 @@
                     }
                 }
             } else {
-                $auxRain = $this->rainSum;
+                $auxRain = $this->rainSum - $this->totalRain;
             }
 
             $this->arr[] = [$date, round($this->temp['min'], 2), round($this->temp['avg'], 1), round($this->temp['max'], 2), round($this->humid['min'], 2), round($this->humid['avg'], 1), round($this->humid['max'], 2), round($auxRain, 2)];
-            $this->totalRain = $this->rainSum;
+            $this->totalRain += $auxRain;
         }
 
         /**
@@ -182,6 +182,9 @@
 
                     // proccess date info by day
                     if($day == $lastDay || $lastDay == ''){
+                        if ($this->count == 0) {
+                            $this->totalRain = $line[7];
+                        }
                         $this->proccessLineData($line);
                     }
                     else {
