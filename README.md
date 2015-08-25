@@ -1,4 +1,4 @@
 Station Monitor
 ===============
 
-Leitor de dados de estações de monitoramento hidrométricas
+Data reader of rain monitoring stations
