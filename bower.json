@@ -1,6 +1,6 @@
 {
   "name": "Station Monitor",
-  "description": "Leitor de dados de estações de monitoramento hidrométricas",
+  "description": "Data reader of rain monitoring stations",
   "dependencies": {
 	"bootstrap": "~3.3.4",
 	"jquery": "~2.1.4"
