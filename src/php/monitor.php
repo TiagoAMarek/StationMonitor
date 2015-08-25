@@ -105,9 +105,9 @@
 
         /**
          * Save data into $this->arr.
-         * @params $date, $temp, $humid, $rainSum
+         * @params $date
          */
-        private function saveData($date){
+        private function saveData($date, $firstValue){
             $auxRain = 0;
             if(!isset($lastPosition)){
                 $lastPosition = 0;
@@ -122,10 +122,11 @@
                     }
                 }
             } else {
-                $auxRain = $this->rainSum - $this->totalRain;
+                $auxRain = $this->rainSum - $firstValue;
             }
 
             $this->arr[] = [$date, round($this->temp['min'], 2), round($this->temp['avg'], 1), round($this->temp['max'], 2), round($this->humid['min'], 2), round($this->humid['avg'], 1), round($this->humid['max'], 2), round($auxRain, 2)];
+
             $this->totalRain += $auxRain;
         }
 
@@ -183,7 +184,8 @@
                     // proccess date info by day
                     if($day == $lastDay || $lastDay == ''){
                         if ($this->count == 0) {
-                            $this->totalRain = $line[7];
+                            //$this->totalRain = $line[7];
+                            $firstValue = $line[7];
                         }
                         $this->proccessLineData($line);
                     }
@@ -191,7 +193,7 @@
                         $this->temp['avg'] = $this->calcAverage($this->temp['total'], $this->count);
                         $this->humid['avg'] = $this->calcAverage($this->humid['total'], $this->count);
 
-                        $this->saveData($lastDate);
+                        $this->saveData($lastDate, $firstValue);
 
                         // reset datas
                         $this->temp = $this->reset($this->temp);
@@ -210,7 +212,7 @@
             if(feof ($pointer)){
                 $this->temp['avg'] = $this->calcAverage($this->temp['total'], $this->count);
                 $this->humid['avg'] = $this->calcAverage($this->humid['total'], $this->count);
-                $this->saveData($lastDate);
+                $this->saveData($lastDate, 0);
             }
         }
 
